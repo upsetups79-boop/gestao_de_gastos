@@ -1,0 +1,33 @@
+name: meu_primeiro_app
+description: Um novo aplicativo Flutter.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  fl_chart: ^0.68.0
+  intl: ^0.19.0
+
+# AQUI ESTAVA O ERRO: Esta parte tem que ficar encostada na esquerda
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+
+# Configuração do Ícone (também encostado na esquerda)
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/icon/icone_app.png"
+  min_sdk_android: 21
