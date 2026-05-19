@@ -1,9 +1,9 @@
 
-  name: Build APK
-  on:
-    push:
-      branches:                                                                                                                 - main
-  jobs:                                                                                                                     build:
+  name: Build APK                                                                                                         on:
+    push:                                                                                                                     branches:
+        - main
+  jobs:
+    build:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
@@ -15,7 +15,7 @@
           with:
             flutter-version: "3.29.3"
         - run: flutter pub get
-        - run: flutter build apk --release --no-tree-shake-icons
+        - run: flutter build apk --release
         - uses: actions/upload-artifact@v4
           with:
             name: app-release
