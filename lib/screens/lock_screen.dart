@@ -1,11 +1,8 @@
- export PATH="$HOME/flutter/bin:$PATH"
-  cd /workspaces/gestao_de_gastos
-  flutter pub get                                                                                                         flutter build apk --release export PATH="$HOME/flutter/bin:$PATH"
-  cd /workspaces/gestao_de_gastos
-  flutter pub get                                                                                                         flutter build apk --release
-  import 'package:flutter/material.dart';
-  import '../services/auth_service.dart';                                                                               
-  class LockScreen extends StatefulWidget {                                                                                 final VoidCallback onUnlocked;
+import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
+
+class LockScreen extends StatefulWidget {
+  final VoidCallback onUnlocked;
 
     const LockScreen({super.key, required this.onUnlocked});
 
