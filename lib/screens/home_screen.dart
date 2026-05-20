@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/expense.dart';
 import '../services/database_helper.dart';
+import '../services/export_service.dart';
 import '../services/pdf_service.dart';
 import '../utils/currency_formatter.dart';
 import '../widgets/expense_card.dart';
@@ -124,11 +125,35 @@ import 'goals_screen.dart';
                 MaterialPageRoute(builder: (_) => const FilterScreen()),
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.picture_as_pdf),
-              tooltip: 'Exportar PDF',
-              onPressed: () =>
-                  PdfService.generateExpenseReport(_monthExpenses, _totalMonth),
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert),
+              onSelected: (value) async {
+                if (value == 'pdf') {
+                  PdfService.generateExpenseReport(
+                      _monthExpenses, _totalMonth);
+                } else if (value == 'csv') {
+                  final incomes =
+                      await DatabaseHelper.instance.getIncomes();
+                  await ExportService.exportAllToCSV(
+                      _monthExpenses, incomes);
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: 'pdf',
+                  child: ListTile(
+                    leading: Icon(Icons.picture_as_pdf),
+                    title: Text('Exportar PDF'),
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 'csv',
+                  child: ListTile(
+                    leading: Icon(Icons.table_chart),
+                    title: Text('Exportar CSV'),
+                  ),
+                ),
+              ],
             ),
             IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData),
           ],
