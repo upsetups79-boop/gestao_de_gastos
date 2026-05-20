@@ -156,7 +156,7 @@ import '../utils/currency_formatter.dart';
         final value = double.parse(_valueController.text.replaceAll(',', '.'));
         final expense = Expense(
           value: value,
-          category: _category,
+          category: _category ?? 'Outros',
           description: _description,
           date: _date,
         );
