@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
+import '../utils/currency_formatter.dart';
 
-  import 'package:flutter/material.dart';                                                                                 import '../utils/currency_formatter.dart';
-                                                                                                                          class MonthSelector extends StatelessWidget {
+class MonthSelector extends StatelessWidget {
     final DateTime selectedMonth;
     final ValueChanged<DateTime> onMonthChanged;
 

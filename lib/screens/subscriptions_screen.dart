@@ -1,6 +1,8 @@
- import 'package:flutter/material.dart';
-  import '../models/subscription.dart';                                                                                   import '../services/database_helper.dart';
-  import '../utils/currency_formatter.dart';                                                                              import '../widgets/empty_state.dart';
+import 'package:flutter/material.dart';
+import '../models/subscription.dart';
+import '../services/database_helper.dart';
+import '../utils/currency_formatter.dart';
+import '../widgets/empty_state.dart';
 
   class SubscriptionsScreen extends StatefulWidget {
     const SubscriptionsScreen({super.key});

@@ -1,7 +1,8 @@
-
-  import 'package:flutter/material.dart';                                                                                 import 'package:flutter/services.dart';
-  import '../models/expense.dart';                                                                                        import '../services/database_helper.dart';
-  import '../utils/currency_formatter.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../models/expense.dart';
+import '../services/database_helper.dart';
+import '../utils/currency_formatter.dart';
 
   class AddExpenseScreen extends StatefulWidget {
     final VoidCallback onExpenseAdded;

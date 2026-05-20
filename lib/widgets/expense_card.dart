@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
+import '../models/expense.dart';
+import '../utils/app_styles.dart';
+import '../utils/currency_formatter.dart';
 
-  import 'package:flutter/material.dart';
-  import '../models/expense.dart';                                                                                        import '../utils/app_styles.dart';
-  import '../utils/currency_formatter.dart';                                                                            
-  class ExpenseCard extends StatelessWidget {
+class ExpenseCard extends StatelessWidget {
     final Expense expense;
     final VoidCallback onDelete;
 

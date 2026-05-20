@@ -1,9 +1,11 @@
- import 'package:flutter/material.dart';
-  import '../models/goal.dart';
-  import '../services/database_helper.dart';
-  import '../utils/currency_formatter.dart';
-  import '../widgets/empty_state.dart';                                                                                 
-  class GoalsScreen extends StatefulWidget {                                                                                const GoalsScreen({super.key});
+import 'package:flutter/material.dart';
+import '../models/goal.dart';
+import '../services/database_helper.dart';
+import '../utils/currency_formatter.dart';
+import '../widgets/empty_state.dart';
+
+class GoalsScreen extends StatefulWidget {
+  const GoalsScreen({super.key});
 
     @override
     State<GoalsScreen> createState() => _GoalsScreenState();

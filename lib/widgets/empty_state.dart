@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 
-  import 'package:flutter/material.dart';
-                                                                                                                          class EmptyState extends StatelessWidget {
-    final IconData icon;                                                                                                    final String title;
-    final String subtitle;
+class EmptyState extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
 
     const EmptyState({
       super.key,

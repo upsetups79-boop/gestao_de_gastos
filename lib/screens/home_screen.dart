@@ -1,13 +1,14 @@
-                                                                                                                         import 'package:flutter/material.dart';
-  import '../models/expense.dart';                                                                                        import '../services/database_helper.dart';
-  import '../services/pdf_service.dart';
-  import '../utils/currency_formatter.dart';
-  import '../widgets/expense_card.dart';
-  import '../widgets/monthly_chart.dart';
-  import '../widgets/month_selector.dart';
-  import 'add_expense_screen.dart';
-  import 'subscriptions_screen.dart';
-  import 'goals_screen.dart';
+import 'package:flutter/material.dart';
+import '../models/expense.dart';
+import '../services/database_helper.dart';
+import '../services/pdf_service.dart';
+import '../utils/currency_formatter.dart';
+import '../widgets/expense_card.dart';
+import '../widgets/monthly_chart.dart';
+import '../widgets/month_selector.dart';
+import 'add_expense_screen.dart';
+import 'subscriptions_screen.dart';
+import 'goals_screen.dart';
 
   class HomeScreen extends StatefulWidget {
     const HomeScreen({super.key});

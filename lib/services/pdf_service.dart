@@ -1,7 +1,8 @@
-
-  import 'package:pdf/pdf.dart';
-  import 'package:pdf/widgets.dart' as pw;                                                                                import 'package:printing/printing.dart';
-  import '../models/expense.dart';                                                                                        import '../utils/currency_formatter.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import '../models/expense.dart';
+import '../utils/currency_formatter.dart';
 
   class PdfService {
     static Future<void> generateExpenseReport(

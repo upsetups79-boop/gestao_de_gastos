@@ -1,8 +1,8 @@
 import 'package:sqflite/sqflite.dart';
-  import 'package:path/path.dart' as p;
-  import '../models/expense.dart';
-  import '../models/subscription.dart';
-  import '../models/goal.dart';
+import 'package:path/path.dart' as p;
+import '../models/expense.dart';
+import '../models/subscription.dart';
+import '../models/goal.dart';
 
   class DatabaseHelper {
     static final DatabaseHelper instance = DatabaseHelper._init();
