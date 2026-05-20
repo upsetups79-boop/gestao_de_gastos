@@ -8,6 +8,7 @@ import '../widgets/monthly_chart.dart';
 import '../widgets/month_selector.dart';
 import 'add_expense_screen.dart';
 import 'categories_screen.dart';
+import 'filter_screen.dart';
 import 'incomes_screen.dart';
 import 'subscriptions_screen.dart';
 import 'goals_screen.dart';
@@ -115,6 +116,14 @@ import 'goals_screen.dart';
         appBar: AppBar(
           title: const Text('Gestão de Gastos'),
           actions: [
+            IconButton(
+              icon: const Icon(Icons.filter_list),
+              tooltip: 'Filtros',
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const FilterScreen()),
+              ),
+            ),
             IconButton(
               icon: const Icon(Icons.picture_as_pdf),
               tooltip: 'Exportar PDF',
