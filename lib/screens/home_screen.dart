@@ -8,6 +8,7 @@ import '../widgets/expense_card.dart';
 import '../widgets/monthly_chart.dart';
 import '../widgets/month_selector.dart';
 import 'add_expense_screen.dart';
+import 'backup_screen.dart';
 import 'categories_screen.dart';
 import 'filter_screen.dart';
 import 'incomes_screen.dart';
@@ -136,6 +137,12 @@ import 'goals_screen.dart';
                       await DatabaseHelper.instance.getIncomes();
                   await ExportService.exportAllToCSV(
                       _monthExpenses, incomes);
+                } else if (value == 'backup') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const BackupScreen()),
+                  );
                 }
               },
               itemBuilder: (context) => [
@@ -151,6 +158,13 @@ import 'goals_screen.dart';
                   child: ListTile(
                     leading: Icon(Icons.table_chart),
                     title: Text('Exportar CSV'),
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 'backup',
+                  child: ListTile(
+                    leading: Icon(Icons.backup),
+                    title: Text('Backup e Restaurar'),
                   ),
                 ),
               ],
