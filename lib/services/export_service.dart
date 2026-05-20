@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cross_file/cross_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../models/expense.dart';
@@ -62,6 +63,7 @@ class ExportService {
     final directory = await getTemporaryDirectory();
     final file = File('${directory.path}/$filename');
     await file.writeAsString(content);
-    await Share.shareXFiles([file], subject: 'Exportação Financeira');
+    final xFile = XFile(file.path);
+    await Share.shareXFiles([xFile], subject: 'Exportação Financeira');
   }
 }

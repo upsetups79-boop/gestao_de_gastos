@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cross_file/cross_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../models/expense.dart';
@@ -36,7 +37,8 @@ class BackupService {
 
   static Future<void> shareBackup() async {
     final path = await createBackup();
-    await Share.shareXFiles([path], subject: 'Backup Financeiro');
+    final file = XFile(path);
+    await Share.shareXFiles([file], subject: 'Backup Financeiro');
   }
 
   static Future<void> restoreBackup(String jsonContent) async {
