@@ -25,6 +25,8 @@ import 'goals_screen.dart';
     double _totalMonth = 0;
     double _totalLastMonth = 0;
     double _totalIncome = 0;
+    double _totalToday = 0;
+    double _totalWeek = 0;
     bool _isLoading = true;
     DateTime _selectedMonth =
         DateTime(DateTime.now().year, DateTime.now().month, 1);
@@ -38,6 +40,7 @@ import 'goals_screen.dart';
     Future<void> _loadData() async {
       setState(() => _isLoading = true);
 
+      final now = DateTime.now();
       final startOfMonth = _selectedMonth;
       final endOfMonth =
           DateTime(_selectedMonth.year, _selectedMonth.month + 1, 0, 23, 59, 59);
@@ -45,6 +48,11 @@ import 'goals_screen.dart';
           DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1);
       final endOfLastMonth =
           DateTime(_selectedMonth.year, _selectedMonth.month, 0, 23, 59, 59);
+      final startOfDay = DateTime(now.year, now.month, now.day);
+      final endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
+      final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+      final startOfWeekDay = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+      final endOfWeek = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day + 6, 23, 59, 59);
 
       final allExpenses = await DatabaseHelper.instance.getExpenses();
       final currentMonthData = await DatabaseHelper.instance
@@ -53,6 +61,10 @@ import 'goals_screen.dart';
           .getExpensesByDateRange(startOfLastMonth, endOfLastMonth);
       final currentMonthIncome = await DatabaseHelper.instance
           .getIncomesByDateRange(startOfMonth, endOfMonth);
+      final todayData = await DatabaseHelper.instance
+          .getExpensesByDateRange(startOfDay, endOfDay);
+      final weekData = await DatabaseHelper.instance
+          .getExpensesByDateRange(startOfWeekDay, endOfWeek);
 
       final totalCurrent =
           currentMonthData.fold(0.0, (sum, item) => sum + item.value);
@@ -60,6 +72,10 @@ import 'goals_screen.dart';
           lastMonthData.fold(0.0, (sum, item) => sum + item.value);
       final totalIncome =
           currentMonthIncome.fold(0.0, (sum, item) => sum + item.value);
+      final totalToday =
+          todayData.fold(0.0, (sum, item) => sum + item.value);
+      final totalWeek =
+          weekData.fold(0.0, (sum, item) => sum + item.value);
 
       if (mounted) {
         setState(() {
@@ -68,6 +84,8 @@ import 'goals_screen.dart';
           _totalMonth = totalCurrent;
           _totalLastMonth = totalLast;
           _totalIncome = totalIncome;
+          _totalToday = totalToday;
+          _totalWeek = totalWeek;
           _isLoading = false;
         });
       }
@@ -124,6 +142,8 @@ import 'goals_screen.dart';
                       _buildSummaryCard(),
                       const SizedBox(height: 20),
                       if (isCurrentMonth) ...[
+                        _buildQuickStats(),
+                        const SizedBox(height: 20),
                         _buildComparisonCard(),
                         const SizedBox(height: 20),
                       ],
@@ -265,6 +285,75 @@ import 'goals_screen.dart';
             ],
           ),
         ),
+      );
+    }
+
+    Widget _buildQuickStats() {
+      return Row(
+        children: [
+          Expanded(
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.today, color: Colors.blue[700], size: 20),
+                        const SizedBox(width: 8),
+                        Text('Hoje',
+                            style: TextStyle(
+                                color: Colors.grey[600], fontSize: 14)),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(CurrencyFormatter.format(_totalToday),
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue[700])),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.date_range, color: Colors.orange[700],
+                            size: 20),
+                        const SizedBox(width: 8),
+                        Text('Semana',
+                            style: TextStyle(
+                                color: Colors.grey[600], fontSize: 14)),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(CurrencyFormatter.format(_totalWeek),
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange[700])),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       );
     }
 
