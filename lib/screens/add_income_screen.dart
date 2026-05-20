@@ -84,6 +84,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                   labelText: 'Valor',
                   prefixText: 'R\$ ',
                   border: OutlineInputBorder(),
+                  hintText: 'Ex: 3.500,00',
                 ),
                 keyboardType: TextInputType.number,
                 inputFormatters: [
@@ -91,7 +92,18 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                 ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Informe o valor';
+                    return 'Por favor, informe o valor';
+                  }
+                  final parsed = double.tryParse(
+                      value.replaceAll('.', '').replaceAll(',', '.'));
+                  if (parsed == null) {
+                    return 'Valor inválido. Use números e vírgula';
+                  }
+                  if (parsed <= 0) {
+                    return 'O valor deve ser maior que zero';
+                  }
+                  if (parsed > 999999) {
+                    return 'Valor muito alto';
                   }
                   return null;
                 },

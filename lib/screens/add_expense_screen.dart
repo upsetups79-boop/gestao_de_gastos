@@ -62,6 +62,7 @@ import '../utils/currency_formatter.dart';
                     labelText: 'Valor (R\$)',
                     prefixIcon: Icon(Icons.attach_money),
                     border: OutlineInputBorder(),
+                    hintText: 'Ex: 50,00',
                   ),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
@@ -69,9 +70,18 @@ import '../utils/currency_formatter.dart';
                     FilteringTextInputFormatter.allow(RegExp(r'[\d,.]')),
                   ],
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'Informe o valor';
-                    if (double.tryParse(value.replaceAll(',', '.')) == null) {
-                      return 'Valor inválido';
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, informe o valor';
+                    }
+                    final parsed = double.tryParse(value.replaceAll(',', '.'));
+                    if (parsed == null) {
+                      return 'Valor inválido. Use números e vírgula';
+                    }
+                    if (parsed <= 0) {
+                      return 'O valor deve ser maior que zero';
+                    }
+                    if (parsed > 999999) {
+                      return 'Valor muito alto';
                     }
                     return null;
                   },

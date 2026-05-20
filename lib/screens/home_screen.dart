@@ -3,6 +3,7 @@ import '../models/expense.dart';
 import '../services/database_helper.dart';
 import '../services/export_service.dart';
 import '../services/pdf_service.dart';
+import '../utils/app_animations.dart';
 import '../utils/currency_formatter.dart';
 import '../widgets/expense_card.dart';
 import '../widgets/monthly_chart.dart';
@@ -123,7 +124,7 @@ import 'goals_screen.dart';
               tooltip: 'Filtros',
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const FilterScreen()),
+                AppAnimations.slideTransition(const FilterScreen()),
               ),
             ),
             PopupMenuButton<String>(
@@ -140,8 +141,7 @@ import 'goals_screen.dart';
                 } else if (value == 'backup') {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (_) => const BackupScreen()),
+                    AppAnimations.slideTransition(const BackupScreen()),
                   );
                 }
               },
@@ -205,8 +205,8 @@ import 'goals_screen.dart';
         floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (_) => AddExpenseScreen(onExpenseAdded: _loadData)),
+            AppAnimations.slideTransition(
+                AddExpenseScreen(onExpenseAdded: _loadData)),
           ),
           backgroundColor: Colors.green,
           child: const Icon(Icons.add, color: Colors.white),
@@ -228,19 +228,19 @@ import 'goals_screen.dart';
             if (index == 1) {
               Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (_) => const IncomesScreen()));
+                  AppAnimations.slideTransition(const IncomesScreen()));
             } else if (index == 2) {
               Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (_) => const SubscriptionsScreen()));
+                  AppAnimations.slideTransition(const SubscriptionsScreen()));
             } else if (index == 3) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const GoalsScreen()));
+              Navigator.push(
+                  context,
+                  AppAnimations.slideTransition(const GoalsScreen()));
             } else if (index == 4) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const CategoriesScreen()));
+              Navigator.push(
+                  context,
+                  AppAnimations.slideTransition(const CategoriesScreen()));
             }
           },
         ),
