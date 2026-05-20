@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/expense.dart';
+import '../models/category.dart';
 import '../services/database_helper.dart';
 import '../utils/currency_formatter.dart';
 
@@ -16,16 +17,28 @@ import '../utils/currency_formatter.dart';
   class _AddExpenseScreenState extends State<AddExpenseScreen> {
     final _formKey = GlobalKey<FormState>();
     final _valueController = TextEditingController();
-    String _category = 'alimentação';
+    String? _category;
     String _description = '';
     DateTime _date = DateTime.now();
-    final List<String> _categories = [
-      'alimentação',
-      'transporte',
-      'contas',
-      'lazer',
-      'outros'
-    ];
+    List<Category> _categories = [];
+    bool _isLoadingCategories = true;
+
+    @override
+    void initState() {
+      super.initState();
+      _loadCategories();
+    }
+
+    Future<void> _loadCategories() async {
+      final categories = await DatabaseHelper.instance.getCategories();
+      setState(() {
+        _categories = categories;
+        _isLoadingCategories = false;
+        if (categories.isNotEmpty) {
+          _category = categories.first.name;
+        }
+      });
+    }
 
     @override
     void dispose() {
@@ -64,20 +77,22 @@ import '../utils/currency_formatter.dart';
                   },
                 ),
                 const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    labelText: 'Categoria',
-                    prefixIcon: Icon(Icons.category),
-                    border: OutlineInputBorder(),
-                  ),
-                  value: _category,
-                  items: _categories
-                      .map((c) => DropdownMenuItem(
-                          value: c,
-                          child: Text(c[0].toUpperCase() + c.substring(1))))
-                      .toList(),
-                  onChanged: (value) => setState(() => _category = value!),
-                ),
+                _isLoadingCategories
+                    ? const CircularProgressIndicator()
+                    : DropdownButtonFormField<String>(
+                        decoration: const InputDecoration(
+                          labelText: 'Categoria',
+                          prefixIcon: Icon(Icons.category),
+                          border: OutlineInputBorder(),
+                        ),
+                        value: _category,
+                        items: _categories
+                            .map((c) => DropdownMenuItem(
+                                value: c.name,
+                                child: Text(c.name)))
+                            .toList(),
+                        onChanged: (value) => setState(() => _category = value!),
+                      ),
                 const SizedBox(height: 16),
                 TextFormField(
                   decoration: const InputDecoration(

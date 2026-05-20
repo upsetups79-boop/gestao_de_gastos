@@ -7,6 +7,7 @@ import '../widgets/expense_card.dart';
 import '../widgets/monthly_chart.dart';
 import '../widgets/month_selector.dart';
 import 'add_expense_screen.dart';
+import 'categories_screen.dart';
 import 'incomes_screen.dart';
 import 'subscriptions_screen.dart';
 import 'goals_screen.dart';
@@ -152,6 +153,8 @@ import 'goals_screen.dart';
                 icon: Icon(Icons.subscriptions), label: 'Assinaturas'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.track_changes), label: 'Metas'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.category), label: 'Categorias'),
           ],
           onTap: (index) {
             if (index == 1) {
@@ -167,6 +170,9 @@ import 'goals_screen.dart';
             } else if (index == 3) {
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const GoalsScreen()));
+            } else if (index == 4) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const CategoriesScreen()));
             }
           },
         ),
