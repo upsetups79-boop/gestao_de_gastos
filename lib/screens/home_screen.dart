@@ -7,6 +7,7 @@ import '../widgets/expense_card.dart';
 import '../widgets/monthly_chart.dart';
 import '../widgets/month_selector.dart';
 import 'add_expense_screen.dart';
+import 'incomes_screen.dart';
 import 'subscriptions_screen.dart';
 import 'goals_screen.dart';
 
@@ -22,6 +23,7 @@ import 'goals_screen.dart';
     List<Expense> _monthExpenses = [];
     double _totalMonth = 0;
     double _totalLastMonth = 0;
+    double _totalIncome = 0;
     bool _isLoading = true;
     DateTime _selectedMonth =
         DateTime(DateTime.now().year, DateTime.now().month, 1);
@@ -48,11 +50,15 @@ import 'goals_screen.dart';
           .getExpensesByDateRange(startOfMonth, endOfMonth);
       final lastMonthData = await DatabaseHelper.instance
           .getExpensesByDateRange(startOfLastMonth, endOfLastMonth);
+      final currentMonthIncome = await DatabaseHelper.instance
+          .getIncomesByDateRange(startOfMonth, endOfMonth);
 
       final totalCurrent =
           currentMonthData.fold(0.0, (sum, item) => sum + item.value);
       final totalLast =
           lastMonthData.fold(0.0, (sum, item) => sum + item.value);
+      final totalIncome =
+          currentMonthIncome.fold(0.0, (sum, item) => sum + item.value);
 
       if (mounted) {
         setState(() {
@@ -60,6 +66,7 @@ import 'goals_screen.dart';
           _monthExpenses = currentMonthData;
           _totalMonth = totalCurrent;
           _totalLastMonth = totalLast;
+          _totalIncome = totalIncome;
           _isLoading = false;
         });
       }
@@ -136,8 +143,11 @@ import 'goals_screen.dart';
           child: const Icon(Icons.add, color: Colors.white),
         ),
         bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.account_balance_wallet), label: 'Receitas'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.subscriptions), label: 'Assinaturas'),
             BottomNavigationBarItem(
@@ -148,8 +158,13 @@ import 'goals_screen.dart';
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => const SubscriptionsScreen()));
+                      builder: (_) => const IncomesScreen()));
             } else if (index == 2) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const SubscriptionsScreen()));
+            } else if (index == 3) {
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const GoalsScreen()));
             }
@@ -159,6 +174,7 @@ import 'goals_screen.dart';
     }
 
     Widget _buildSummaryCard() {
+      final balance = _totalIncome - _totalMonth;
       return Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -177,15 +193,50 @@ import 'goals_screen.dart';
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Total em ${CurrencyFormatter.formatMonth(_selectedMonth)}',
+                'Saldo em ${CurrencyFormatter.formatMonth(_selectedMonth)}',
                 style: const TextStyle(fontSize: 16, color: Colors.white70),
               ),
               const SizedBox(height: 8),
-              Text(CurrencyFormatter.format(_totalMonth),
-                  style: const TextStyle(
+              Text(CurrencyFormatter.format(balance),
+                  style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white)),
+                      color: balance >= 0 ? Colors.white : Colors.red[200])),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Receitas',
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.white70)),
+                        Text(CurrencyFormatter.format(_totalIncome),
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Despesas',
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.white70)),
+                        Text(CurrencyFormatter.format(_totalMonth),
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
               if (_totalLastMonth > 0 && _totalMonth > _totalLastMonth * 1.2)
                 Padding(
                   padding: const EdgeInsets.only(top: 10),

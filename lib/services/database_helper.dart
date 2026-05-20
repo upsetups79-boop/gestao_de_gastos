@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
 import '../models/expense.dart';
+import '../models/income.dart';
 import '../models/subscription.dart';
 import '../models/goal.dart';
 
@@ -19,7 +20,21 @@ import '../models/goal.dart';
     Future<Database> _initDB(String filePath) async {
       final dbPath = await getDatabasesPath();
       final path = p.join(dbPath, filePath);
-      return await openDatabase(path, version: 1, onCreate: _createDB);
+      return await openDatabase(path, version: 2, onCreate: _createDB, onUpgrade: _onUpgrade);
+    }
+
+    Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+      if (oldVersion < 2) {
+        await db.execute('''
+          CREATE TABLE incomes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            value REAL NOT NULL,
+            source TEXT NOT NULL,
+            description TEXT,
+            date TEXT NOT NULL
+          )
+        ''');
+      }
     }
 
     Future _createDB(Database db, int version) async {
@@ -28,6 +43,15 @@ import '../models/goal.dart';
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           value REAL NOT NULL,
           category TEXT NOT NULL,
+          description TEXT,
+          date TEXT NOT NULL
+        )
+      ''');
+      await db.execute('''
+        CREATE TABLE incomes (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          value REAL NOT NULL,
+          source TEXT NOT NULL,
           description TEXT,
           date TEXT NOT NULL
         )
@@ -75,6 +99,33 @@ import '../models/goal.dart';
     Future<int> deleteExpense(int id) async {
       final db = await instance.database;
       return await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
+    }
+
+    Future<int> insertIncome(Income income) async {
+      final db = await instance.database;
+      return await db.insert('incomes', income.toMap());
+    }
+
+    Future<List<Income>> getIncomes() async {
+      final db = await instance.database;
+      final maps = await db.query('incomes', orderBy: 'date DESC');
+      return maps.map((map) => Income.fromMap(map)).toList();
+    }
+
+    Future<List<Income>> getIncomesByDateRange(DateTime start, DateTime end) async {
+      final db = await instance.database;
+      final maps = await db.query(
+        'incomes',
+        where: 'date >= ? AND date <= ?',
+        whereArgs: [start.toIso8601String(), end.toIso8601String()],
+        orderBy: 'date DESC',
+      );
+      return maps.map((map) => Income.fromMap(map)).toList();
+    }
+
+    Future<int> deleteIncome(int id) async {
+      final db = await instance.database;
+      return await db.delete('incomes', where: 'id = ?', whereArgs: [id]);
     }
 
     Future<int> insertSubscription(Subscription subscription) async {
